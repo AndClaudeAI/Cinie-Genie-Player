@@ -2,6 +2,24 @@ import { useRef, useCallback, useEffect } from 'react';
 import { usePlayerStore } from '../stores/playerStore';
 import { StreamManager } from '../services/streamManager';
 
+const BASE = import.meta.env.BASE_URL;
+
+function updateMediaSession(title: string, isPlaying: boolean) {
+  if (!('mediaSession' in navigator)) return;
+
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: title || 'Cine Genie Player',
+    artist: 'Cine Genie',
+    album: '',
+    artwork: [
+      { src: `${BASE}icon-192.png`, sizes: '192x192', type: 'image/png' },
+      { src: `${BASE}icon-512.png`, sizes: '512x512', type: 'image/png' },
+    ],
+  });
+
+  navigator.mediaSession.playbackState = isPlaying ? 'playing' : 'paused';
+}
+
 export function usePlayer() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef(new StreamManager());
@@ -12,6 +30,9 @@ export function usePlayer() {
     if (!video) return;
 
     store.setSrc(src, title);
+    if (src) {
+      updateMediaSession(title || '', false);
+    }
     try {
       await streamRef.current.attach(video, src);
       store.setQualityLevels(streamRef.current.getQualityLevels());
@@ -106,9 +127,24 @@ export function usePlayer() {
     if (!video) return;
 
     const handlers: [string, EventListener][] = [
-      ['play', () => store.setPlaying(true)],
-      ['pause', () => store.setPlaying(false)],
-      ['timeupdate', () => store.setCurrentTime(video.currentTime)],
+      ['play', () => {
+        store.setPlaying(true);
+        updateMediaSession(usePlayerStore.getState().title, true);
+      }],
+      ['pause', () => {
+        store.setPlaying(false);
+        updateMediaSession(usePlayerStore.getState().title, false);
+      }],
+      ['timeupdate', () => {
+        store.setCurrentTime(video.currentTime);
+        if ('mediaSession' in navigator && video.duration) {
+          navigator.mediaSession.setPositionState({
+            duration: video.duration,
+            playbackRate: video.playbackRate,
+            position: video.currentTime,
+          });
+        }
+      }],
       ['durationchange', () => store.setDuration(video.duration)],
       ['volumechange', () => {
         store.setVolume(video.volume);
@@ -143,6 +179,32 @@ export function usePlayer() {
     document.addEventListener('fullscreenchange', onFullscreenChange);
     return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
   }, [store]);
+
+  useEffect(() => {
+    if (!('mediaSession' in navigator)) return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    const actions: [MediaSessionAction, MediaSessionActionHandler][] = [
+      ['play', () => { video.play(); }],
+      ['pause', () => { video.pause(); }],
+      ['seekbackward', () => { video.currentTime = Math.max(0, video.currentTime - 10); }],
+      ['seekforward', () => { video.currentTime = Math.min(video.duration || 0, video.currentTime + 10); }],
+      ['seekto', (details) => {
+        if (details.seekTime != null) video.currentTime = details.seekTime;
+      }],
+    ];
+
+    for (const [action, handler] of actions) {
+      try { navigator.mediaSession.setActionHandler(action, handler); } catch {}
+    }
+
+    return () => {
+      for (const [action] of actions) {
+        try { navigator.mediaSession.setActionHandler(action, null); } catch {}
+      }
+    };
+  }, []);
 
   useEffect(() => {
     return () => streamRef.current.detach();
