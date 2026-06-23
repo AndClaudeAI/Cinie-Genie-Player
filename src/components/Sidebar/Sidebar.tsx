@@ -150,7 +150,7 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
                       type="text"
                       value={urlInput}
                       onChange={e => setUrlInput(e.target.value)}
-                      placeholder="Enter stream URL..."
+                      placeholder="Paste stream URL or link..."
                       className="glass-input"
                     />
                     <button type="submit" className="input-btn" disabled={!urlInput.trim()}>
@@ -159,25 +159,34 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
                   </div>
                 </form>
 
-                <div className="file-actions">
-                  <button className="file-action-btn glass-light" onClick={handlePickFiles}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><polyline points="13 2 13 9 20 9" /></svg>
-                    <span>Open Files</span>
-                  </button>
-                  <button className="file-action-btn glass-light" onClick={handleBrowseFolder}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" /></svg>
-                    <span>Browse Folder</span>
-                  </button>
+                <div className="section-header">
+                  <span className="section-title">Quick Actions</span>
                 </div>
 
-                <label className="file-upload glass-light">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
-                  <span>Drag & Drop or Click</span>
-                  <input type="file" accept="video/*,.m3u,.m3u8,.srt,.vtt" onChange={handleFileUpload} hidden />
-                </label>
+                <div className="action-cards">
+                  <button className="action-card" onClick={handlePickFiles}>
+                    <div className="action-card-icon">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><polyline points="13 2 13 9 20 9" /></svg>
+                    </div>
+                    <span className="action-card-label">Open Files</span>
+                  </button>
+                  <button className="action-card" onClick={handleBrowseFolder}>
+                    <div className="action-card-icon">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" /></svg>
+                    </div>
+                    <span className="action-card-label">Browse Folder</span>
+                  </button>
+                  <label className="action-card">
+                    <div className="action-card-icon">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
+                    </div>
+                    <span className="action-card-label">Upload</span>
+                    <input type="file" accept="video/*,.m3u,.m3u8,.srt,.vtt" onChange={handleFileUpload} hidden />
+                  </label>
+                </div>
 
                 {src && (
-                  <div className="now-playing glass-light">
+                  <div className="now-playing-card">
                     <div className="now-playing-indicator" />
                     <span className="now-playing-text">Now Playing</span>
                   </div>
@@ -192,14 +201,14 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
 
                 {library.length > 0 && (
                   <>
-                    <div className="library-header">
-                      <span className="library-title">Library ({library.length})</span>
-                      <button className="library-clear" onClick={() => setLibrary([])}>Clear</button>
+                    <div className="section-header">
+                      <span className="section-title">Your Library</span>
+                      <button className="section-action" onClick={() => setLibrary([])}>Clear All</button>
                     </div>
 
                     {library.length > 5 && (
-                      <div className="channel-search">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                      <div className="search-bar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
                         <input
                           type="text"
                           value={librarySearch}
@@ -210,19 +219,19 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
                       </div>
                     )}
 
-                    <div className="channel-list">
+                    <div className="content-list">
                       {filteredLibrary.map((file, idx) => (
                         <button
                           key={`${file.name}-${idx}`}
-                          className="channel-item glass-light"
+                          className="content-item"
                           onClick={() => handlePlayLibraryFile(file)}
                         >
-                          <div className="file-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                          <div className="content-item-thumb">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="5 3 19 12 5 21 5 3" /></svg>
                           </div>
-                          <div className="channel-info">
-                            <span className="channel-name">{file.name.split('/').pop()}</span>
-                            <span className="channel-group">{formatFileSize(file.size)}</span>
+                          <div className="content-item-info">
+                            <span className="content-item-name">{file.name.split('/').pop()}</span>
+                            <span className="content-item-meta">{formatFileSize(file.size)}</span>
                           </div>
                         </button>
                       ))}
@@ -249,9 +258,9 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
                   </div>
                 </form>
 
-                <label className="file-upload glass-light">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
-                  <span>Load M3U File</span>
+                <label className="upload-card">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
+                  <span>Load M3U Playlist File</span>
                   <input type="file" accept=".m3u,.m3u8" onChange={handleFileUpload} hidden />
                 </label>
 
@@ -264,8 +273,13 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
 
                 {channels.length > 0 && (
                   <>
-                    <div className="channel-search">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                    <div className="section-header">
+                      <span className="section-title">Channels</span>
+                      <span className="section-count">{channels.length}</span>
+                    </div>
+
+                    <div className="search-bar">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
                       <input
                         type="text"
                         value={searchQuery}
@@ -276,9 +290,9 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
                     </div>
 
                     {groups.length > 0 && (
-                      <div className="group-filter">
+                      <div className="category-pills">
                         <button
-                          className={`group-pill ${activeGroup === null ? 'active' : ''}`}
+                          className={`pill ${activeGroup === null ? 'active' : ''}`}
                           onClick={() => setActiveGroup(null)}
                         >
                           All
@@ -286,7 +300,7 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
                         {groups.map(group => (
                           <button
                             key={group}
-                            className={`group-pill ${activeGroup === group ? 'active' : ''}`}
+                            className={`pill ${activeGroup === group ? 'active' : ''}`}
                             onClick={() => setActiveGroup(group)}
                           >
                             {group}
@@ -295,31 +309,41 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
                       </div>
                     )}
 
-                    <div className="channel-list">
+                    <div className="content-list">
                       {displayChannels.map(channel => (
                         <button
                           key={channel.id}
-                          className="channel-item glass-light"
+                          className="content-item"
                           onClick={() => handleChannelClick(channel)}
                         >
                           {channel.logo ? (
-                            <img src={channel.logo} alt="" className="channel-logo" loading="lazy" />
+                            <img src={channel.logo} alt="" className="content-item-logo" loading="lazy" />
                           ) : (
-                            <div className="channel-logo-fallback">
+                            <div className="content-item-thumb channel-thumb">
                               {channel.name.charAt(0).toUpperCase()}
                             </div>
                           )}
-                          <div className="channel-info">
-                            <span className="channel-name">{channel.name}</span>
-                            {channel.group && <span className="channel-group">{channel.group}</span>}
+                          <div className="content-item-info">
+                            <span className="content-item-name">{channel.name}</span>
+                            {channel.group && <span className="content-item-meta">{channel.group}</span>}
                           </div>
                         </button>
                       ))}
                       {displayChannels.length === 0 && (
-                        <div className="no-channels">No channels found</div>
+                        <div className="empty-state">No channels found</div>
                       )}
                     </div>
                   </>
+                )}
+
+                {channels.length === 0 && !channelsLoading && (
+                  <div className="empty-state">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ opacity: 0.3 }}>
+                      <circle cx="12" cy="12" r="2" />
+                      <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14" />
+                    </svg>
+                    <p>Add an M3U playlist to get started</p>
+                  </div>
                 )}
               </div>
             )}
