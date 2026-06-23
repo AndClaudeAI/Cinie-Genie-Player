@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import { usePlayerStore } from '../../stores/playerStore';
 import { useChannelStore } from '../../stores/channelStore';
-import type { ViewMode } from '../../types';
 import './Sidebar.css';
 
 interface Props {
