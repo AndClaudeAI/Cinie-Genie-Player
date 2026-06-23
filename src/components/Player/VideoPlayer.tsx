@@ -3,6 +3,7 @@ import { usePlayerStore } from '../../stores/playerStore';
 import { useKeyboard } from '../../hooks/useKeyboard';
 import { Controls } from './Controls';
 import { SubtitleOverlay } from '../Subtitles/SubtitleOverlay';
+import logoImg from '../../assets/logo.png';
 import type { usePlayer } from '../../hooks/usePlayer';
 import './VideoPlayer.css';
 
@@ -204,14 +205,23 @@ export function VideoPlayer({ player }: Props) {
       />
 
       {!src && (
-        <div className="player-empty">
-          <div className="player-empty-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="5 3 19 12 5 21 5 3" />
-            </svg>
+        <div className="hero-empty">
+          <div className="hero-bg" />
+          <div className="hero-content">
+            <img src={logoImg} alt="" className="hero-logo" />
+            <h1 className="hero-title">Your Cinema</h1>
+            <p className="hero-subtitle">Stream, Watch, Enjoy</p>
+            <div className="hero-tags">
+              <span>MP4</span>
+              <span>MKV</span>
+              <span>HLS</span>
+              <span>DASH</span>
+              <span>IPTV</span>
+            </div>
           </div>
-          <p className="player-empty-text">Drop a video file or enter a URL to start</p>
-          <p className="player-empty-hint">Supports MP4, WebM, MKV, HLS (.m3u8), and DASH (.mpd)</p>
+          <div className="hero-footer">
+            <p>Drop a video file or enter a URL below</p>
+          </div>
         </div>
       )}
 

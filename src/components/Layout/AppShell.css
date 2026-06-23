@@ -1,4 +1,7 @@
-/* Mobile-first ITVX-style layout */
+/* ═══════════════════════════════════
+   ITVX-Style Mobile-First Layout
+   ═══════════════════════════════════ */
+
 .app-shell {
   display: flex;
   flex-direction: column;
@@ -8,34 +11,35 @@
   overflow: hidden;
 }
 
-/* ── Mobile Header ── */
-.mobile-header {
+/* ── Top Bar ── */
+.top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px var(--space-md);
-  padding-top: max(10px, env(safe-area-inset-top));
+  padding: 12px var(--space-md);
+  padding-top: max(12px, env(safe-area-inset-top));
   flex-shrink: 0;
   background: var(--bg-primary);
-  border-bottom: 1px solid var(--glass-border);
   z-index: 5;
 }
 
-.mobile-header-left {
+.top-bar-left {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 10px;
 }
 
-.mobile-logo {
-  height: 26px;
+.top-bar-logo {
+  height: 28px;
   width: auto;
   object-fit: contain;
 }
 
-.mobile-brand {
-  font-size: 17px;
-  font-weight: 700;
+.top-bar-brand {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
   background: var(--accent-gradient);
   background-size: 200% 200%;
   animation: gradientShift 6s ease infinite;
@@ -44,13 +48,100 @@
   background-clip: text;
 }
 
-/* ── Player Area ── */
-.app-main {
+/* ── Scrollable Content Area ── */
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Player / Hero Card ── */
+.player-card {
   flex-shrink: 0;
   width: 100%;
   aspect-ratio: 16 / 9;
+  margin: 0 0 var(--space-sm);
   position: relative;
   background: #000;
+}
+
+.player-card--hero {
+  aspect-ratio: auto;
+  min-height: 55dvh;
+  max-height: 65dvh;
+}
+
+/* ── Now Playing Bar (ITVX "Continue Watching") ── */
+.now-playing-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px var(--space-md);
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--glass-border);
+  flex-shrink: 0;
+}
+
+.npb-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.npb-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 212, 170, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.npb-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.npb-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.npb-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.npb-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.npb-close:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* ── Bottom Navigation ── */
@@ -58,12 +149,10 @@
   display: flex;
   align-items: stretch;
   justify-content: space-around;
-  padding: 6px 0;
-  padding-bottom: max(6px, env(safe-area-inset-bottom));
-  border-top: 1px solid var(--glass-border);
-  background: var(--glass-bg-dark);
-  backdrop-filter: blur(var(--glass-blur-heavy));
-  -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  padding: 4px 0 2px;
+  padding-bottom: max(2px, env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-secondary);
   flex-shrink: 0;
   z-index: 5;
 }
@@ -73,26 +162,37 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 3px;
   flex: 1;
-  padding: 6px 0;
+  padding: 8px 0 6px;
   color: var(--text-muted);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.02em;
   transition: color var(--transition-fast);
   -webkit-tap-highlight-color: transparent;
+  position: relative;
 }
 
 .bottom-nav-item.active {
   color: var(--accent-primary);
 }
 
-.bottom-nav-item.active svg {
-  filter: drop-shadow(0 0 8px rgba(0, 212, 170, 0.5));
+.bottom-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 2px;
+  background: var(--accent-primary);
+  border-radius: 0 0 2px 2px;
 }
 
-/* ── Desktop Layout ── */
+/* ═══════════════════════════════════
+   Desktop Layout (769px+)
+   ═══════════════════════════════════ */
 @media (min-width: 769px) {
   .app-shell {
     flex-direction: row;
@@ -104,19 +204,27 @@
     padding-right: max(var(--space-sm), env(safe-area-inset-right));
   }
 
-  .mobile-header {
+  .top-bar,
+  .bottom-nav,
+  .now-playing-bar {
     display: none;
   }
 
-  .bottom-nav {
-    display: none;
+  .content-scroll {
+    flex: 1;
+    flex-direction: row;
+    overflow: hidden;
+    gap: var(--space-sm);
   }
 
-  .app-main {
+  .player-card,
+  .player-card--hero {
     flex: 1;
     aspect-ratio: auto;
     height: 100%;
-    min-width: 0;
+    min-height: unset;
+    max-height: unset;
+    margin: 0;
     border-radius: var(--radius-lg);
     overflow: hidden;
   }
