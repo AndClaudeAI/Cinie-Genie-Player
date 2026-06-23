@@ -1,9 +1,13 @@
 .app-shell {
   display: flex;
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
   gap: var(--space-sm);
   padding: var(--space-sm);
+  padding-top: max(var(--space-sm), env(safe-area-inset-top));
+  padding-bottom: max(var(--space-sm), env(safe-area-inset-bottom));
+  padding-left: max(var(--space-sm), env(safe-area-inset-left));
+  padding-right: max(var(--space-sm), env(safe-area-inset-right));
   background: var(--bg-primary);
   overflow: hidden;
 }
