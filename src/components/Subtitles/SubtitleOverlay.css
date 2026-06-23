@@ -1,0 +1,40 @@
+.subtitle-overlay {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  max-width: 80%;
+  animation: fadeIn var(--transition-fast) forwards;
+}
+
+.subtitle-text {
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  line-height: 1.5;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  word-wrap: break-word;
+}
+
+.subtitle-indicator {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--glass-bg-dark);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--glass-border);
+  opacity: 0.6;
+  pointer-events: none;
+}

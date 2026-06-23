@@ -1,0 +1,98 @@
+.progress-bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  padding: 0 var(--space-xs);
+}
+
+.progress-time {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  min-width: 42px;
+  text-align: center;
+  user-select: none;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  position: relative;
+  overflow: hidden;
+  transition: height var(--transition-fast);
+}
+
+.progress-bar:hover .progress-track,
+.progress-bar.dragging .progress-track {
+  height: 6px;
+}
+
+.progress-buffer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-fast);
+}
+
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--accent-gradient);
+  background-size: 200% 100%;
+  animation: gradientShift 4s ease infinite;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.progress-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px rgba(0, 212, 170, 0.5);
+  transform: translateX(50%) scale(0);
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.progress-bar:hover .progress-thumb,
+.progress-bar.dragging .progress-thumb {
+  transform: translateX(50%) scale(1);
+}
+
+.progress-tooltip {
+  position: absolute;
+  bottom: 100%;
+  transform: translateX(-50%);
+  background: var(--glass-bg-dark);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  white-space: nowrap;
+  margin-bottom: 8px;
+}
