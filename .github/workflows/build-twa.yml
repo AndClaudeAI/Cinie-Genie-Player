@@ -13,6 +13,10 @@ on:
 permissions:
   contents: write
 
+env:
+  STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+  KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,115 +32,92 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Set passwords
+        run: |
+          if [ -z "$STORE_PASSWORD" ]; then
+            echo "STORE_PASSWORD=cinie-genie-debug" >> "$GITHUB_ENV"
+            echo "KEY_PASSWORD=cinie-genie-debug" >> "$GITHUB_ENV"
+          fi
+
       - name: Configure bubblewrap
         run: |
           mkdir -p "$HOME/.aspect"
-          cat > "$HOME/.aspect/aspect.config.json" << EOF
-          {
-            "jdkPath": "$JAVA_HOME",
-            "androidSdkPath": "$ANDROID_SDK_ROOT"
-          }
-          EOF
+          printf '{"jdkPath":"%s","androidSdkPath":"%s"}\n' \
+            "$JAVA_HOME" "$ANDROID_SDK_ROOT" \
+            > "$HOME/.aspect/aspect.config.json"
 
       - name: Accept Android SDK licenses
-        run: yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses || true
+        run: yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses 2>/dev/null || true
 
       - name: Generate signing keystore
         run: |
-          STORE_PASS="${{ secrets.KEYSTORE_PASSWORD }}"
-          KEY_PASS="${{ secrets.KEY_PASSWORD }}"
-          if [ -z "$STORE_PASS" ]; then
-            STORE_PASS="cinie-genie-debug"
-            KEY_PASS="cinie-genie-debug"
-          fi
           keytool -genkeypair \
             -alias cinie-genie \
             -keyalg RSA -keysize 2048 \
             -validity 10000 \
             -keystore ./cinie-genie.keystore \
-            -storepass "$STORE_PASS" \
-            -keypass "$KEY_PASS" \
+            -storepass "$STORE_PASSWORD" \
+            -keypass "$KEY_PASSWORD" \
             -dname "CN=Cinie Genie, O=Cinie Genie Studios, C=US"
 
       - name: Extract signing fingerprint
         id: fingerprint
         run: |
-          STORE_PASS="${{ secrets.KEYSTORE_PASSWORD }}"
-          if [ -z "$STORE_PASS" ]; then STORE_PASS="cinie-genie-debug"; fi
           FINGERPRINT=$(keytool -list -v -keystore ./cinie-genie.keystore \
-            -alias cinie-genie -storepass "$STORE_PASS" \
+            -alias cinie-genie -storepass "$STORE_PASSWORD" \
             | grep "SHA256:" | sed 's/.*SHA256: //')
           echo "sha256=$FINGERPRINT" >> "$GITHUB_OUTPUT"
           echo "Signing fingerprint: $FINGERPRINT"
 
-      - name: Initialize TWA project
+      - name: Initialize TWA project with bubblewrap
         run: |
-          STORE_PASS="${{ secrets.KEYSTORE_PASSWORD }}"
-          KEY_PASS="${{ secrets.KEY_PASSWORD }}"
-          if [ -z "$STORE_PASS" ]; then
-            STORE_PASS="cinie-genie-debug"
-            KEY_PASS="cinie-genie-debug"
-          fi
-          npx @bubblewrap/cli init \
-            --manifest="https://andclaudeai.github.io/Cinie-Genie-Player/manifest.json" \
-            --directory=./twa-build \
-            --signingKeyPath=./cinie-genie.keystore \
-            --signingKeyAlias=cinie-genie \
-          <<< "$(printf '%s\n' "$STORE_PASS" "$KEY_PASS" "y")"
+          mkdir -p twa-build
+          cp twa-manifest.json twa-build/twa-manifest.json
+          cp cinie-genie.keystore twa-build/cinie-genie.keystore
+          cd twa-build
+          yes | npx --yes @bubblewrap/cli init \
+            --manifest="https://andclaudeai.github.io/Cinie-Genie-Player/manifest.json" 2>&1 || true
+          ls -la
 
       - name: Build TWA APK
         run: |
-          STORE_PASS="${{ secrets.KEYSTORE_PASSWORD }}"
-          KEY_PASS="${{ secrets.KEY_PASSWORD }}"
-          if [ -z "$STORE_PASS" ]; then
-            STORE_PASS="cinie-genie-debug"
-            KEY_PASS="cinie-genie-debug"
-          fi
-          cd twa-build || cd .
-          npx @bubblewrap/cli build \
-            --signingKeyPath=../cinie-genie.keystore \
-            --signingKeyAlias=cinie-genie \
-            --signingKeyPassword="$KEY_PASS" \
-            --keystorePassword="$STORE_PASS" \
-            --skipPwaValidation
-
-      - name: Find APK
-        id: apk
-        run: |
-          APK=$(find . -name "*.apk" -type f | head -1)
-          AAB=$(find . -name "*.aab" -type f | head -1)
-          echo "apk=$APK" >> "$GITHUB_OUTPUT"
-          echo "aab=$AAB" >> "$GITHUB_OUTPUT"
-          echo "Found APK: $APK"
-          echo "Found AAB: $AAB"
+          cd twa-build
+          yes | npx --yes @bubblewrap/cli build \
+            --skipPwaValidation 2>&1
+        env:
+          BUBBLEWRAP_KEYSTORE_PASSWORD: ${{ env.STORE_PASSWORD }}
+          BUBBLEWRAP_KEY_PASSWORD: ${{ env.KEY_PASSWORD }}
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: cinie-genie-player-apk
           path: |
-            **/*.apk
-            **/*.aab
+            twa-build/**/*.apk
+            twa-build/**/*.aab
           if-no-files-found: warn
 
-      - name: Summary
+      - name: Build summary
         run: |
-          echo "## TWA Build Complete" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "**Signing SHA-256:** \`${{ steps.fingerprint.outputs.sha256 }}\`" >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "Download the APK from the workflow artifacts." >> "$GITHUB_STEP_SUMMARY"
-          echo "" >> "$GITHUB_STEP_SUMMARY"
-          echo "### Digital Asset Links" >> "$GITHUB_STEP_SUMMARY"
-          echo "For full TWA mode (no browser bar), add this to your root domain's" >> "$GITHUB_STEP_SUMMARY"
-          echo "\`/.well-known/assetlinks.json\`:" >> "$GITHUB_STEP_SUMMARY"
-          echo '```json' >> "$GITHUB_STEP_SUMMARY"
-          echo '[{' >> "$GITHUB_STEP_SUMMARY"
-          echo '  "relation": ["delegate_permission/common.handle_all_urls"],' >> "$GITHUB_STEP_SUMMARY"
-          echo '  "target": {' >> "$GITHUB_STEP_SUMMARY"
-          echo '    "namespace": "android_app",' >> "$GITHUB_STEP_SUMMARY"
-          echo '    "package_name": "com.ciniegenie.player",' >> "$GITHUB_STEP_SUMMARY"
-          echo "    \"sha256_cert_fingerprints\": [\"${{ steps.fingerprint.outputs.sha256 }}\"]" >> "$GITHUB_STEP_SUMMARY"
-          echo '  }' >> "$GITHUB_STEP_SUMMARY"
-          echo '}]' >> "$GITHUB_STEP_SUMMARY"
-          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat >> "$GITHUB_STEP_SUMMARY" << EOF
+          ## TWA Build Complete
+
+          **Signing SHA-256:** \`${{ steps.fingerprint.outputs.sha256 }}\`
+
+          Download the APK from the **Artifacts** section above.
+
+          ### Digital Asset Links Setup
+          For full TWA mode (no browser toolbar), serve this JSON at
+          \`https://andclaudeai.github.io/.well-known/assetlinks.json\`:
+
+          \`\`\`json
+          [{
+            "relation": ["delegate_permission/common.handle_all_urls"],
+            "target": {
+              "namespace": "android_app",
+              "package_name": "com.ciniegenie.player",
+              "sha256_cert_fingerprints": ["${{ steps.fingerprint.outputs.sha256 }}"]
+            }
+          }]
+          \`\`\`
+          EOF
