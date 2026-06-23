@@ -1,0 +1,47 @@
+{
+  "packageId": "com.ciniegenie.player",
+  "host": "andclaudeai.github.io",
+  "name": "Cinie Genie Player",
+  "launcherName": "Cinie Genie",
+  "display": "standalone",
+  "themeColor": "#06060e",
+  "themeColorDark": "#06060e",
+  "navigationColor": "#06060e",
+  "navigationColorDark": "#06060e",
+  "navigationDividerColor": "#06060e",
+  "navigationDividerColorDark": "#06060e",
+  "backgroundColor": "#06060e",
+  "enableNotifications": true,
+  "startUrl": "/Cinie-Genie-Player/",
+  "iconUrl": "https://andclaudeai.github.io/Cinie-Genie-Player/icon-512.png",
+  "maskableIconUrl": "https://andclaudeai.github.io/Cinie-Genie-Player/icon-maskable.png",
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://andclaudeai.github.io/Cinie-Genie-Player/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://andclaudeai.github.io/Cinie-Genie-Player/",
+  "minSdkVersion": 19,
+  "orientation": "default",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "playBilling": {
+    "enabled": false
+  },
+  "locationDelegation": {
+    "enabled": false
+  },
+  "signing": {
+    "keyPath": "./cinie-genie.keystore",
+    "alias": "cinie-genie"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1
+}
