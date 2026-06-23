@@ -1,44 +1,123 @@
+/* Mobile-first ITVX-style layout */
 .app-shell {
   display: flex;
+  flex-direction: column;
   height: 100dvh;
   width: 100vw;
-  gap: var(--space-sm);
-  padding: var(--space-sm);
-  padding-top: max(var(--space-sm), env(safe-area-inset-top));
-  padding-bottom: max(var(--space-sm), env(safe-area-inset-bottom));
-  padding-left: max(var(--space-sm), env(safe-area-inset-left));
-  padding-right: max(var(--space-sm), env(safe-area-inset-right));
   background: var(--bg-primary);
   overflow: hidden;
 }
 
-.app-main {
-  flex: 1;
-  min-width: 0;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  position: relative;
+/* ── Mobile Header ── */
+.mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px var(--space-md);
+  padding-top: max(10px, env(safe-area-inset-top));
+  flex-shrink: 0;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 5;
 }
 
-@media (max-width: 768px) {
+.mobile-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.mobile-logo {
+  height: 26px;
+  width: auto;
+  object-fit: contain;
+}
+
+.mobile-brand {
+  font-size: 17px;
+  font-weight: 700;
+  background: var(--accent-gradient);
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Player Area ── */
+.app-main {
+  flex-shrink: 0;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  background: #000;
+}
+
+/* ── Bottom Navigation ── */
+.bottom-nav {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  padding: 6px 0;
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--glass-border);
+  background: var(--glass-bg-dark);
+  backdrop-filter: blur(var(--glass-blur-heavy));
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  flex-shrink: 0;
+  z-index: 5;
+}
+
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex: 1;
+  padding: 6px 0;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: color var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav-item.active {
+  color: var(--accent-primary);
+}
+
+.bottom-nav-item.active svg {
+  filter: drop-shadow(0 0 8px rgba(0, 212, 170, 0.5));
+}
+
+/* ── Desktop Layout ── */
+@media (min-width: 769px) {
   .app-shell {
-    flex-direction: column;
+    flex-direction: row;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    padding-top: max(var(--space-sm), env(safe-area-inset-top));
+    padding-bottom: max(var(--space-sm), env(safe-area-inset-bottom));
+    padding-left: max(var(--space-sm), env(safe-area-inset-left));
+    padding-right: max(var(--space-sm), env(safe-area-inset-right));
   }
 
-  .sidebar {
-    width: 100% !important;
-    height: auto;
-    max-height: 200px;
-    border-radius: var(--radius-md);
+  .mobile-header {
+    display: none;
   }
 
-  .sidebar.collapsed {
-    width: 100% !important;
-    height: 48px;
-    max-height: 48px;
+  .bottom-nav {
+    display: none;
   }
 
-  .channel-list {
-    max-height: 120px;
+  .app-main {
+    flex: 1;
+    aspect-ratio: auto;
+    height: 100%;
+    min-width: 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
   }
 }

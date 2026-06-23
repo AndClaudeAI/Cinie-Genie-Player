@@ -1,6 +1,6 @@
 .install-prompt {
   position: fixed;
-  bottom: var(--space-md);
+  bottom: 64px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -14,6 +14,12 @@
   max-width: 480px;
   width: calc(100% - 32px);
   border: 1px solid var(--glass-border);
+}
+
+@media (min-width: 769px) {
+  .install-prompt {
+    bottom: var(--space-md);
+  }
 }
 
 .install-prompt-content {

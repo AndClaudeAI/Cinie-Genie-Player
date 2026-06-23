@@ -32,33 +32,37 @@
 
 .controls-top {
   position: relative;
-  padding: var(--space-lg) var(--space-xl);
+  padding: var(--space-sm) var(--space-md);
   animation: fadeIn var(--transition-normal) forwards;
 }
 
 .controls-title-bar {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .controls-title {
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: -0.01em;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .audio-badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-full);
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 .atmos-badge {
@@ -71,33 +75,33 @@
 
 .controls-bottom {
   position: relative;
-  padding: 0 var(--space-md) var(--space-md);
+  padding: 0 var(--space-sm) var(--space-sm);
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: 4px;
 }
 
 .controls-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-md);
+  gap: var(--space-sm);
 }
 
 .controls-left,
 .controls-right {
   display: flex;
   align-items: center;
-  gap: var(--space-xs);
+  gap: 2px;
 }
 
 .control-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-md);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
   color: var(--text-primary);
   transition: all var(--transition-fast);
   position: relative;
@@ -105,13 +109,56 @@
 
 .control-btn:hover {
   background: rgba(255, 255, 255, 0.08);
-  transform: scale(1.05);
 }
 
 .control-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.9);
 }
 
 .control-btn.active {
   color: var(--accent-primary);
+}
+
+/* Desktop: larger controls */
+@media (min-width: 769px) {
+  .controls-top {
+    padding: var(--space-lg) var(--space-xl);
+  }
+
+  .controls-title {
+    font-size: 16px;
+  }
+
+  .audio-badge {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  .controls-bottom {
+    padding: 0 var(--space-md) var(--space-md);
+    gap: var(--space-sm);
+  }
+
+  .controls-bar {
+    gap: var(--space-md);
+  }
+
+  .controls-left,
+  .controls-right {
+    gap: var(--space-xs);
+  }
+
+  .control-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+  }
+
+  .control-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .control-btn:active {
+    transform: scale(0.95);
+  }
 }
