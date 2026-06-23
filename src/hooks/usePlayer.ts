@@ -17,6 +17,7 @@ export function usePlayer() {
       store.setQualityLevels(streamRef.current.getQualityLevels());
       store.setAudioTracks(streamRef.current.getAudioTracks());
       store.setLoading(false);
+      video.play().catch(() => {});
     } catch {
       store.setLoading(false);
     }

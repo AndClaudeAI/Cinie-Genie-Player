@@ -20,7 +20,14 @@ export class StreamManager {
     }
 
     video.src = src;
-    return Promise.resolve();
+    video.load();
+    return new Promise<void>((resolve) => {
+      const onReady = () => {
+        video.removeEventListener('loadedmetadata', onReady);
+        resolve();
+      };
+      video.addEventListener('loadedmetadata', onReady);
+    });
   }
 
   private attachHls(video: HTMLVideoElement, src: string): Promise<void> {
