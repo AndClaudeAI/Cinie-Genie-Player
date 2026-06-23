@@ -28,7 +28,7 @@ export function Controls({
   const hasAtmos = audioTracks.some(t => t.isDolbyAtmos);
 
   return (
-    <div className="controls-wrapper" onClick={e => e.stopPropagation()}>
+    <div className="controls-wrapper">
       <div className="controls-gradient" />
 
       <div className="controls-top">
