@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { usePlayerStore } from '../../stores/playerStore';
 import { useChannelStore } from '../../stores/channelStore';
 import { pickVideoFiles, pickDirectory, getFileUrl, formatFileSize, isSubtitleFile, type LocalFile } from '../../services/fileSystem';
+import logoImg from '../../assets/logo.png';
 import './Sidebar.css';
 
 interface Props {
@@ -108,18 +109,7 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
     <aside className={`sidebar glass-heavy ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
         <div className="sidebar-logo">
-          <div className="logo-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <defs>
-                <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#00d4aa" />
-                  <stop offset="100%" stopColor="#7b2fbe" />
-                </linearGradient>
-              </defs>
-              <polygon points="5 3 19 12 5 21 5 3" fill="url(#logoGrad)" />
-            </svg>
-          </div>
-          {!isCollapsed && <span className="logo-text">Cinie Genie</span>}
+          <img src={logoImg} alt="Cine Genie" className="logo-img" />
         </div>
         <button className="sidebar-toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
