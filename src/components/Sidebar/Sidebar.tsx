@@ -1,18 +1,23 @@
 import { useState, useCallback } from 'react';
 import { usePlayerStore } from '../../stores/playerStore';
 import { useChannelStore } from '../../stores/channelStore';
+import { pickVideoFiles, pickDirectory, getFileUrl, formatFileSize, isSubtitleFile, type LocalFile } from '../../services/fileSystem';
 import './Sidebar.css';
 
 interface Props {
   onUrlSubmit: (url: string, title?: string) => void;
+  onSubtitleFile?: (file: File) => void;
 }
 
-export function Sidebar({ onUrlSubmit }: Props) {
+export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
   const { viewMode, setViewMode, src } = usePlayerStore();
   const { channels, groups, activeGroup, setActiveGroup, filteredChannels, setActiveChannel, searchQuery, setSearchQuery, loadFromUrl, loadFromM3U, isLoading: channelsLoading } = useChannelStore();
   const [urlInput, setUrlInput] = useState('');
   const [m3uInput, setM3uInput] = useState('');
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [library, setLibrary] = useState<LocalFile[]>([]);
+  const [librarySearch, setLibrarySearch] = useState('');
+  const [isScanning, setIsScanning] = useState(false);
 
   const handleUrlSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -44,12 +49,60 @@ export function Sidebar({ onUrlSubmit }: Props) {
     e.target.value = '';
   }, [loadFromM3U, onUrlSubmit]);
 
+  const handlePickFiles = useCallback(async () => {
+    const files = await pickVideoFiles();
+    if (files.length === 0) return;
+
+    for (const f of files) {
+      if (isSubtitleFile(f.name)) {
+        if (onSubtitleFile && f.handle) {
+          const file = await f.handle.getFile();
+          onSubtitleFile(file);
+        }
+        continue;
+      }
+    }
+
+    const videoFiles = files.filter(f => !isSubtitleFile(f.name));
+    if (videoFiles.length === 1) {
+      const url = await getFileUrl(videoFiles[0]);
+      onUrlSubmit(url, videoFiles[0].name);
+    } else if (videoFiles.length > 1) {
+      setLibrary(prev => {
+        const existingNames = new Set(prev.map(f => f.name));
+        const newFiles = videoFiles.filter(f => !existingNames.has(f.name));
+        return [...prev, ...newFiles];
+      });
+    }
+  }, [onUrlSubmit, onSubtitleFile]);
+
+  const handleBrowseFolder = useCallback(async () => {
+    setIsScanning(true);
+    const files = await pickDirectory();
+    setLibrary(prev => {
+      const existingNames = new Set(prev.map(f => f.name));
+      const newFiles = files.filter(f => !existingNames.has(f.name));
+      return [...prev, ...newFiles];
+    });
+    setIsScanning(false);
+  }, []);
+
+  const handlePlayLibraryFile = useCallback(async (file: LocalFile) => {
+    const url = await getFileUrl(file);
+    const displayName = file.name.split('/').pop() ?? file.name;
+    onUrlSubmit(url, displayName);
+  }, [onUrlSubmit]);
+
   const handleChannelClick = useCallback((channel: typeof channels[0]) => {
     setActiveChannel(channel);
     onUrlSubmit(channel.url, channel.name);
   }, [setActiveChannel, onUrlSubmit]);
 
   const displayChannels = filteredChannels();
+
+  const filteredLibrary = librarySearch
+    ? library.filter(f => f.name.toLowerCase().includes(librarySearch.toLowerCase()))
+    : library;
 
   return (
     <aside className={`sidebar glass-heavy ${isCollapsed ? 'collapsed' : ''}`}>
@@ -116,9 +169,20 @@ export function Sidebar({ onUrlSubmit }: Props) {
                   </div>
                 </form>
 
+                <div className="file-actions">
+                  <button className="file-action-btn glass-light" onClick={handlePickFiles}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><polyline points="13 2 13 9 20 9" /></svg>
+                    <span>Open Files</span>
+                  </button>
+                  <button className="file-action-btn glass-light" onClick={handleBrowseFolder}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" /></svg>
+                    <span>Browse Folder</span>
+                  </button>
+                </div>
+
                 <label className="file-upload glass-light">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
-                  <span>Open File</span>
+                  <span>Drag & Drop or Click</span>
                   <input type="file" accept="video/*,.m3u,.m3u8,.srt,.vtt" onChange={handleFileUpload} hidden />
                 </label>
 
@@ -127,6 +191,53 @@ export function Sidebar({ onUrlSubmit }: Props) {
                     <div className="now-playing-indicator" />
                     <span className="now-playing-text">Now Playing</span>
                   </div>
+                )}
+
+                {isScanning && (
+                  <div className="loading-channels">
+                    <div className="loading-spinner small" />
+                    <span>Scanning folder...</span>
+                  </div>
+                )}
+
+                {library.length > 0 && (
+                  <>
+                    <div className="library-header">
+                      <span className="library-title">Library ({library.length})</span>
+                      <button className="library-clear" onClick={() => setLibrary([])}>Clear</button>
+                    </div>
+
+                    {library.length > 5 && (
+                      <div className="channel-search">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                        <input
+                          type="text"
+                          value={librarySearch}
+                          onChange={e => setLibrarySearch(e.target.value)}
+                          placeholder="Search library..."
+                          className="search-input"
+                        />
+                      </div>
+                    )}
+
+                    <div className="channel-list">
+                      {filteredLibrary.map((file, idx) => (
+                        <button
+                          key={`${file.name}-${idx}`}
+                          className="channel-item glass-light"
+                          onClick={() => handlePlayLibraryFile(file)}
+                        >
+                          <div className="file-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                          </div>
+                          <div className="channel-info">
+                            <span className="channel-name">{file.name.split('/').pop()}</span>
+                            <span className="channel-group">{formatFileSize(file.size)}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </>
                 )}
               </div>
             )}
