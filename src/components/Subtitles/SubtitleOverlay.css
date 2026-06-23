@@ -1,40 +1,60 @@
 .subtitle-overlay {
   position: absolute;
-  bottom: 80px;
+  bottom: 56px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
   pointer-events: none;
   display: flex;
   justify-content: center;
-  max-width: 80%;
+  max-width: 90%;
   animation: fadeIn var(--transition-fast) forwards;
 }
 
 .subtitle-text {
-  padding: 6px 16px;
+  padding: 4px 12px;
   border-radius: var(--radius-sm);
   text-align: center;
-  line-height: 1.5;
+  line-height: 1.4;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
   word-wrap: break-word;
+  font-size: 14px;
 }
 
 .subtitle-indicator {
   position: absolute;
-  top: var(--space-md);
-  right: var(--space-md);
+  top: var(--space-sm);
+  right: var(--space-sm);
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 10px;
+  gap: 4px;
+  font-size: 9px;
   color: var(--text-muted);
   background: var(--glass-bg-dark);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-full);
   border: 1px solid var(--glass-border);
   opacity: 0.6;
   pointer-events: none;
+}
+
+@media (min-width: 769px) {
+  .subtitle-overlay {
+    bottom: 80px;
+    max-width: 80%;
+  }
+
+  .subtitle-text {
+    padding: 6px 16px;
+    line-height: 1.5;
+  }
+
+  .subtitle-indicator {
+    top: var(--space-md);
+    right: var(--space-md);
+    font-size: 10px;
+    padding: 4px 10px;
+  }
 }

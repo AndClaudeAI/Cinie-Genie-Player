@@ -1,18 +1,30 @@
 .progress-bar-wrapper {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: 6px;
   width: 100%;
-  padding: 0 var(--space-xs);
+  padding: 0;
 }
 
 .progress-time {
-  font-size: 12px;
+  font-size: 10px;
   font-variant-numeric: tabular-nums;
   color: var(--text-secondary);
-  min-width: 42px;
+  min-width: 36px;
   text-align: center;
   user-select: none;
+}
+
+@media (min-width: 769px) {
+  .progress-bar-wrapper {
+    gap: var(--space-sm);
+    padding: 0 var(--space-xs);
+  }
+
+  .progress-time {
+    font-size: 12px;
+    min-width: 42px;
+  }
 }
 
 .progress-bar {

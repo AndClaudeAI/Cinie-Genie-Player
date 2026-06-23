@@ -3,7 +3,6 @@
   width: 100%;
   height: 100%;
   background: #000;
-  border-radius: var(--radius-lg);
   overflow: hidden;
   cursor: none;
   -webkit-tap-highlight-color: transparent;
@@ -34,13 +33,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   background: radial-gradient(ellipse at center, rgba(0, 212, 170, 0.03) 0%, transparent 70%);
 }
 
 .player-empty-icon {
-  width: 80px;
-  height: 80px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,15 +50,24 @@
   animation: pulse 3s ease-in-out infinite;
 }
 
+.player-empty-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
 .player-empty-text {
-  font-size: 15px;
+  font-size: 13px;
   color: var(--text-secondary);
   font-weight: 500;
+  text-align: center;
+  padding: 0 var(--space-lg);
 }
 
 .player-empty-hint {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
+  text-align: center;
+  padding: 0 var(--space-lg);
 }
 
 .player-loading {
@@ -72,8 +80,8 @@
 }
 
 .loading-spinner {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border: 3px solid rgba(255, 255, 255, 0.1);
   border-top-color: var(--accent-primary);
   border-radius: 50%;
@@ -91,8 +99,8 @@
 }
 
 .play-animation-circle {
-  width: 60px;
-  height: 60px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(12px);
@@ -102,8 +110,6 @@
   align-items: center;
   justify-content: center;
   color: var(--text-primary);
-  animation: scaleIn 0.15s ease-out forwards;
-  opacity: 0;
   animation: playPulse 0.4s ease-out forwards;
 }
 
@@ -148,7 +154,7 @@
 }
 
 .seek-animation-content span {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -162,4 +168,43 @@
   0% { transform: scale(0.7); opacity: 0; }
   50% { transform: scale(1.1); opacity: 1; }
   100% { transform: scale(1); opacity: 1; }
+}
+
+/* Desktop: larger player elements */
+@media (min-width: 769px) {
+  .player-container {
+    border-radius: var(--radius-lg);
+  }
+
+  .player-empty-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .player-empty-icon svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .player-empty-text {
+    font-size: 15px;
+  }
+
+  .player-empty-hint {
+    font-size: 12px;
+  }
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+  }
+
+  .play-animation-circle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .seek-animation-content span {
+    font-size: 13px;
+  }
 }
