@@ -18,11 +18,13 @@ export function VideoPlayer({ player }: Props) {
   const tapTimerRef = useRef<number>(0);
   const tapCountRef = useRef(0);
   const lastTapXRef = useRef(0);
+  const lastTapWidthRef = useRef(0);
+  const touchedRef = useRef(false);
   const { isPlaying, isLoading, src, showControls, setShowControls, setShowSettings } = usePlayerStore();
   const [showPlayAnim, setShowPlayAnim] = useState(false);
   const [seekAnim, setSeekAnim] = useState<SeekAnim>(null);
 
-  const showControlsWithTimer = useCallback(() => {
+  const resetControlsTimer = useCallback(() => {
     setShowControls(true);
     clearTimeout(controlsTimerRef.current);
     controlsTimerRef.current = window.setTimeout(() => {
@@ -43,40 +45,55 @@ export function VideoPlayer({ player }: Props) {
     setTimeout(() => setSeekAnim(null), 600);
   }, []);
 
-  const handleSingleTap = useCallback((x: number, width: number) => {
+  const doSeek = useCallback((seconds: number, side: 'left' | 'right') => {
+    const { currentTime } = usePlayerStore.getState();
+    player.seek(currentTime + seconds);
+    triggerSeekAnim(side);
+    resetControlsTimer();
+  }, [player, triggerSeekAnim, resetControlsTimer]);
+
+  const doTogglePlay = useCallback(() => {
+    player.togglePlay();
+    triggerPlayAnim();
+    resetControlsTimer();
+  }, [player, triggerPlayAnim, resetControlsTimer]);
+
+  const executeSingleTap = useCallback((x: number, width: number) => {
     const zone = x / width;
     if (zone < 0.3) {
-      const { currentTime } = usePlayerStore.getState();
-      player.seek(currentTime - 10);
-      triggerSeekAnim('left');
+      doSeek(-10, 'left');
     } else if (zone > 0.7) {
-      const { currentTime } = usePlayerStore.getState();
-      player.seek(currentTime + 10);
-      triggerSeekAnim('right');
+      doSeek(10, 'right');
     } else {
-      player.togglePlay();
-      triggerPlayAnim();
+      doTogglePlay();
     }
-    showControlsWithTimer();
-  }, [player, triggerPlayAnim, triggerSeekAnim, showControlsWithTimer]);
+  }, [doSeek, doTogglePlay]);
 
-  const handleDoubleTap = useCallback((x: number, width: number) => {
+  const executeDoubleTap = useCallback((x: number, width: number) => {
     const zone = x / width;
     if (zone < 0.35) {
-      const { currentTime } = usePlayerStore.getState();
-      player.seek(currentTime - 10);
-      triggerSeekAnim('left');
+      doSeek(-10, 'left');
     } else if (zone > 0.65) {
-      const { currentTime } = usePlayerStore.getState();
-      player.seek(currentTime + 10);
-      triggerSeekAnim('right');
+      doSeek(10, 'right');
     } else {
       player.toggleFullscreen(containerRef.current);
     }
-  }, [player, triggerSeekAnim]);
+  }, [player, doSeek]);
+
+  const handleTouchStart = useCallback(() => {
+    touchedRef.current = true;
+  }, []);
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
     if (!src) return;
+
+    const target = e.target as HTMLElement;
+    if (target.closest('.controls-bottom') || target.closest('.controls-top') || target.closest('.settings-panel')) {
+      return;
+    }
+
+    e.preventDefault();
+
     const touch = e.changedTouches[0];
     if (!touch || !containerRef.current) return;
 
@@ -86,31 +103,47 @@ export function VideoPlayer({ player }: Props) {
 
     tapCountRef.current++;
     lastTapXRef.current = x;
+    lastTapWidthRef.current = width;
 
     if (tapCountRef.current === 1) {
       tapTimerRef.current = window.setTimeout(() => {
         if (tapCountRef.current === 1) {
-          handleSingleTap(lastTapXRef.current, width);
+          executeSingleTap(lastTapXRef.current, lastTapWidthRef.current);
         }
         tapCountRef.current = 0;
       }, 250);
-    } else if (tapCountRef.current === 2) {
+    } else if (tapCountRef.current >= 2) {
       clearTimeout(tapTimerRef.current);
       tapCountRef.current = 0;
-      handleDoubleTap(x, width);
+      executeDoubleTap(x, width);
     }
-  }, [src, handleSingleTap, handleDoubleTap]);
+  }, [src, executeSingleTap, executeDoubleTap]);
 
-  const handleMouseClick = useCallback((e: React.MouseEvent) => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    if (touchedRef.current) {
+      touchedRef.current = false;
+      return;
+    }
     if (!src) return;
-    if (e.detail === 1) {
-      player.togglePlay();
-      triggerPlayAnim();
-      showControlsWithTimer();
-    }
-  }, [src, player, triggerPlayAnim, showControlsWithTimer]);
 
-  const handleMouseDoubleClick = useCallback(() => {
+    const target = e.target as HTMLElement;
+    if (target.closest('.controls-bottom') || target.closest('.controls-top') || target.closest('.settings-panel')) {
+      return;
+    }
+
+    if (e.detail === 1) {
+      doTogglePlay();
+    }
+  }, [src, doTogglePlay]);
+
+  const handleDoubleClick = useCallback((e: React.MouseEvent) => {
+    if (touchedRef.current) return;
+
+    const target = e.target as HTMLElement;
+    if (target.closest('.controls-bottom') || target.closest('.controls-top') || target.closest('.settings-panel')) {
+      return;
+    }
+
     player.toggleFullscreen(containerRef.current);
   }, [player]);
 
@@ -150,13 +183,17 @@ export function VideoPlayer({ player }: Props) {
     <div
       ref={containerRef}
       className={`player-container ${showControls ? 'controls-visible' : ''} ${!src ? 'empty' : ''}`}
-      onMouseMove={showControlsWithTimer}
+      onMouseMove={resetControlsTimer}
       onMouseLeave={() => {
         if (isPlaying) {
           setShowControls(false);
           setShowSettings(false);
         }
       }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onClick={handleClick}
+      onDoubleClick={handleDoubleClick}
       onDragOver={e => e.preventDefault()}
       onDrop={handleFileDrop}
     >
@@ -164,13 +201,6 @@ export function VideoPlayer({ player }: Props) {
         ref={player.videoRef}
         className="video-element"
         playsInline
-      />
-
-      <div
-        className="player-touch-layer"
-        onClick={handleMouseClick}
-        onDoubleClick={handleMouseDoubleClick}
-        onTouchEnd={handleTouchEnd}
       />
 
       {!src && (
