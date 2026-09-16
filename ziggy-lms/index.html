@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ziggy LMS — Study Smarter, Not Harder</title>
+<meta name="description" content="Ziggy LMS is a study group hub with a past question bank, e-notes, e-textbooks, and mathematics formula quiz practice." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%236d0f2b%22/><text x=%2250%22 y=%2268%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22%23d4af37%22 font-family=%22Georgia%22>Z</text></svg>" />
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header" id="top">
+  <div class="container header-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark">Z</span>
+      <span class="brand-text">Ziggy <em>LMS</em></span>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="primaryNav" aria-label="Toggle navigation menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="primary-nav" id="primaryNav">
+      <a href="#features">Features</a>
+      <a href="#question-bank">Question Bank</a>
+      <a href="#enotes">E-Notes</a>
+      <a href="#etextbooks">E-Textbooks</a>
+      <a href="#quiz">Formula Quiz</a>
+      <a href="#join" class="nav-cta">Join the Group</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <p class="eyebrow">The study group that actually shows up</p>
+      <h1>Past questions, present notes,<br> future genius.</h1>
+      <p class="hero-sub">
+        Ziggy LMS brings your past question bank, e-notes, e-textbooks and a formula-flexing
+        quiz arena into one gold-trimmed corner of the internet. Cramming optional; confidence guaranteed.
+      </p>
+      <div class="hero-actions">
+        <a href="#question-bank" class="btn btn-gold">Browse the Question Bank</a>
+        <a href="#quiz" class="btn btn-outline">Test Your Formulas</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>1,200+</strong><span>Past Questions</span></div>
+        <div><strong>350+</strong><span>E-Notes &amp; Slides</span></div>
+        <div><strong>80+</strong><span>E-Textbooks</span></div>
+        <div><strong>24/7</strong><span>Quiz Access</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="section">
+    <div class="container">
+      <h2 class="section-title">Everything on the syllabus, minus the panic</h2>
+      <p class="section-lead">Four pillars. Zero excuses.</p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📝</div>
+          <h3>Past Question Bank</h3>
+          <p>Years of exam questions, sorted by course and session, so history doesn't repeat itself &mdash; it prepares you.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📒</div>
+          <h3>E-Notes</h3>
+          <p>Clean, exam-ready notes distilled from lectures &mdash; because nobody has time to decode 3am handwriting.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>E-Textbooks</h3>
+          <p>A shelf of core and recommended texts, available on demand. Your library card, upgraded.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📐</div>
+          <h3>Formula Quiz Practice</h3>
+          <p>Rapid-fire mathematics formula drills. Muscle memory for your brain's most important muscle.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUESTION BANK -->
+  <section id="question-bank" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Past Question Bank</h2>
+      <p class="section-lead">Because the best way to predict the exam is to have already seen it.</p>
+
+      <div class="filter-bar" data-filter-group="qb">
+        <button class="chip active" data-filter="all">All Subjects</button>
+        <button class="chip" data-filter="math">Mathematics</button>
+        <button class="chip" data-filter="physics">Physics</button>
+        <button class="chip" data-filter="chemistry">Chemistry</button>
+        <button class="chip" data-filter="english">English</button>
+        <button class="chip" data-filter="biology">Biology</button>
+      </div>
+
+      <div class="card-grid" id="qbGrid">
+        <article class="resource-card" data-category="math">
+          <span class="tag tag-gold">Mathematics</span>
+          <h3>WAEC / SAT Past Questions 2015–2024</h3>
+          <p>10 years of algebra, calculus and statistics questions with marking guides.</p>
+          <a href="#" class="resource-link">View Bank →</a>
+        </article>
+        <article class="resource-card" data-category="physics">
+          <span class="tag tag-gold">Physics</span>
+          <h3>Mechanics &amp; Electromagnetism Papers</h3>
+          <p>Theory and objective papers from the last eight sessions, fully sorted by topic.</p>
+          <a href="#" class="resource-link">View Bank →</a>
+        </article>
+        <article class="resource-card" data-category="chemistry">
+          <span class="tag tag-gold">Chemistry</span>
+          <h3>Organic &amp; Inorganic Question Sets</h3>
+          <p>Structured drills covering reaction mechanisms and periodic trends.</p>
+          <a href="#" class="resource-link">View Bank →</a>
+        </article>
+        <article class="resource-card" data-category="english">
+          <span class="tag tag-gold">English</span>
+          <h3>Comprehension &amp; Essay Archives</h3>
+          <p>Past comprehension passages, essay prompts and examiner remarks.</p>
+          <a href="#" class="resource-link">View Bank →</a>
+        </article>
+        <article class="resource-card" data-category="biology">
+          <span class="tag tag-gold">Biology</span>
+          <h3>Genetics &amp; Ecology Question Bank</h3>
+          <p>Objective and theory questions grouped by topic, with model answers.</p>
+          <a href="#" class="resource-link">View Bank →</a>
+        </article>
+        <article class="resource-card" data-category="math">
+          <span class="tag tag-gold">Mathematics</span>
+          <h3>Further Maths Problem Sets</h3>
+          <p>Vectors, complex numbers and mechanics questions for the ambitious.</p>
+          <a href="#" class="resource-link">View Bank →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- E-NOTES -->
+  <section id="enotes" class="section">
+    <div class="container">
+      <h2 class="section-title">E-Notes</h2>
+      <p class="section-lead">The lecture, minus the mumbling.</p>
+
+      <div class="list-cards">
+        <div class="list-card">
+          <div class="list-card-icon">Σ</div>
+          <div>
+            <h3>Calculus: Limits to Integrals</h3>
+            <p>A tidy walk from first principles to definite integrals, with worked examples.</p>
+          </div>
+        </div>
+        <div class="list-card">
+          <div class="list-card-icon">⚛</div>
+          <div>
+            <h3>Physics: Waves &amp; Optics</h3>
+            <p>Diagram-heavy notes on reflection, refraction and interference.</p>
+          </div>
+        </div>
+        <div class="list-card">
+          <div class="list-card-icon">🧪</div>
+          <div>
+            <h3>Chemistry: Bonding &amp; Structure</h3>
+            <p>Covalent, ionic and metallic bonding, explained without the jargon overdose.</p>
+          </div>
+        </div>
+        <div class="list-card">
+          <div class="list-card-icon">🧬</div>
+          <div>
+            <h3>Biology: Cell Division</h3>
+            <p>Mitosis and meiosis, side by side, so the differences finally stick.</p>
+          </div>
+        </div>
+        <div class="list-card">
+          <div class="list-card-icon">📖</div>
+          <div>
+            <h3>English: Literary Devices Cheat Sheet</h3>
+            <p>Every device you'll be asked to spot, with an example you'll actually remember.</p>
+          </div>
+        </div>
+        <div class="list-card">
+          <div class="list-card-icon">📊</div>
+          <div>
+            <h3>Statistics: Probability Essentials</h3>
+            <p>Permutations, combinations and distributions, minus the dread.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- E-TEXTBOOKS -->
+  <section id="etextbooks" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">E-Textbooks</h2>
+      <p class="section-lead">A whole library that fits in one gold-trimmed tab.</p>
+
+      <div class="book-grid">
+        <div class="book">
+          <div class="book-cover book-cover-1">Pure Mathematics</div>
+          <h4>Pure Mathematics for Advanced Level</h4>
+          <span>Core Text</span>
+        </div>
+        <div class="book">
+          <div class="book-cover book-cover-2">Physics</div>
+          <h4>Principles of Physics</h4>
+          <span>Core Text</span>
+        </div>
+        <div class="book">
+          <div class="book-cover book-cover-3">Organic Chemistry</div>
+          <h4>Organic Chemistry Essentials</h4>
+          <span>Recommended</span>
+        </div>
+        <div class="book">
+          <div class="book-cover book-cover-4">Biology</div>
+          <h4>Modern Biology</h4>
+          <span>Core Text</span>
+        </div>
+        <div class="book">
+          <div class="book-cover book-cover-5">English Language</div>
+          <h4>English Language in Use</h4>
+          <span>Recommended</span>
+        </div>
+        <div class="book">
+          <div class="book-cover book-cover-6">Statistics</div>
+          <h4>Statistics for Beginners</h4>
+          <span>Supplementary</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="section quiz-section">
+    <div class="container">
+      <h2 class="section-title">Mathematics Formula Quiz Practice</h2>
+      <p class="section-lead">Where formulas come to prove themselves. Pick a category and go.</p>
+
+      <div class="quiz-panel">
+        <div id="quizSetup" class="quiz-setup">
+          <p class="quiz-label">Choose a category:</p>
+          <div class="filter-bar">
+            <button class="chip quiz-cat active" data-cat="all">All</button>
+            <button class="chip quiz-cat" data-cat="algebra">Algebra</button>
+            <button class="chip quiz-cat" data-cat="geometry">Geometry</button>
+            <button class="chip quiz-cat" data-cat="trig">Trigonometry</button>
+            <button class="chip quiz-cat" data-cat="calculus">Calculus</button>
+          </div>
+          <button id="startQuiz" class="btn btn-gold quiz-start-btn">Start Quiz</button>
+        </div>
+
+        <div id="quizPlay" class="quiz-play hidden">
+          <div class="quiz-meta">
+            <span id="quizProgress">Question 1 of 10</span>
+            <span id="quizScore">Score: 0</span>
+          </div>
+          <h3 id="quizQuestion" class="quiz-question">Question text goes here</h3>
+          <div id="quizOptions" class="quiz-options"></div>
+          <p id="quizFeedback" class="quiz-feedback" aria-live="polite"></p>
+          <button id="nextQuestion" class="btn btn-outline hidden">Next Question →</button>
+        </div>
+
+        <div id="quizResult" class="quiz-result hidden">
+          <h3>Quiz Complete!</h3>
+          <p id="quizFinalScore" class="quiz-final-score">You scored 0 / 10</p>
+          <p id="quizVerdict" class="quiz-verdict"></p>
+          <button id="retryQuiz" class="btn btn-gold">Try Again</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN -->
+  <section id="join" class="section join-section">
+    <div class="container join-inner">
+      <h2>Ready to out-study the syllabus?</h2>
+      <p>Join Ziggy LMS and get the whole toolkit &mdash; question bank, notes, textbooks and quizzes &mdash; in one place.</p>
+      <form class="join-form" id="joinForm">
+        <input type="email" placeholder="you@example.com" required aria-label="Email address" />
+        <button type="submit" class="btn btn-gold">Join the Group</button>
+      </form>
+      <p id="joinNote" class="join-note"></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="brand">
+      <span class="brand-mark">Z</span>
+      <span class="brand-text">Ziggy <em>LMS</em></span>
+    </div>
+    <p>&copy; <span id="year"></span> Ziggy LMS. Built for study groups who mean business.</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
