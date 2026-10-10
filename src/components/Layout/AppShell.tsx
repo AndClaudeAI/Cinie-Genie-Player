@@ -18,8 +18,8 @@ export function AppShell() {
     <div className="app-shell">
       <header className="top-bar">
         <div className="top-bar-left">
-          <img src={logoImg} alt="Cine Genie" className="top-bar-logo" />
-          <span className="top-bar-brand">cine genie</span>
+          <img src={logoImg} alt="Auxsplay" className="top-bar-logo" />
+          <span className="top-bar-brand">auxsplay</span>
         </div>
       </header>
 

@@ -8,8 +8,8 @@ function updateMediaSession(title: string, isPlaying: boolean) {
   if (!('mediaSession' in navigator)) return;
 
   navigator.mediaSession.metadata = new MediaMetadata({
-    title: title || 'Cine Genie Player',
-    artist: 'Cine Genie',
+    title: title || 'Auxsplay',
+    artist: 'Auxsplay',
     album: '',
     artwork: [
       { src: `${BASE}icon-192.png`, sizes: '192x192', type: 'image/png' },

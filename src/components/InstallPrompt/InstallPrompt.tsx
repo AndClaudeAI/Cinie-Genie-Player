@@ -40,7 +40,7 @@ export function InstallPrompt() {
           </svg>
         </div>
         <div className="install-prompt-text">
-          <strong>Install Cinie Genie</strong>
+          <strong>Install Auxsplay</strong>
           <span>Get the full app experience with local file access</span>
         </div>
       </div>
