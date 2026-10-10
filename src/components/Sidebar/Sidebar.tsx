@@ -109,7 +109,7 @@ export function Sidebar({ onUrlSubmit, onSubtitleFile }: Props) {
     <aside className={`sidebar glass-heavy ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
         <div className="sidebar-logo">
-          <img src={logoImg} alt="Cine Genie" className="logo-img" />
+          <img src={logoImg} alt="Auxsplay" className="logo-img" />
         </div>
         <button className="sidebar-toggle" onClick={() => setIsCollapsed(!isCollapsed)}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

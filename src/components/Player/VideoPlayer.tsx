@@ -209,7 +209,7 @@ export function VideoPlayer({ player }: Props) {
           <div className="hero-bg" />
           <div className="hero-content">
             <img src={logoImg} alt="" className="hero-logo" />
-            <h1 className="hero-title">Your Cinema</h1>
+            <h1 className="hero-title">Auxsplay</h1>
             <p className="hero-subtitle">Stream, Watch, Enjoy</p>
             <div className="hero-tags">
               <span>MP4</span>

@@ -1,8 +1,8 @@
 {
-  "packageId": "com.ciniegenie.player",
+  "packageId": "com.auxsplay.player",
   "host": "andclaudeai.github.io",
-  "name": "Cinie Genie Player",
-  "launcherName": "Cinie Genie",
+  "name": "Auxsplay",
+  "launcherName": "Auxsplay",
   "display": "standalone",
   "themeColor": "#06060e",
   "themeColorDark": "#06060e",
@@ -39,8 +39,8 @@
     "enabled": false
   },
   "signing": {
-    "keyPath": "./cinie-genie.keystore",
-    "alias": "cinie-genie"
+    "keyPath": "./auxsplay.keystore",
+    "alias": "auxsplay"
   },
   "appVersionName": "1.0.0",
   "appVersionCode": 1

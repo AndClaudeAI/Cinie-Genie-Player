@@ -35,8 +35,8 @@ jobs:
       - name: Set passwords
         run: |
           if [ -z "$STORE_PASSWORD" ]; then
-            echo "STORE_PASSWORD=cinie-genie-debug" >> "$GITHUB_ENV"
-            echo "KEY_PASSWORD=cinie-genie-debug" >> "$GITHUB_ENV"
+            echo "STORE_PASSWORD=auxsplay-debug" >> "$GITHUB_ENV"
+            echo "KEY_PASSWORD=auxsplay-debug" >> "$GITHUB_ENV"
           fi
 
       - name: Configure bubblewrap
@@ -52,19 +52,19 @@ jobs:
       - name: Generate signing keystore
         run: |
           keytool -genkeypair \
-            -alias cinie-genie \
+            -alias auxsplay \
             -keyalg RSA -keysize 2048 \
             -validity 10000 \
-            -keystore ./cinie-genie.keystore \
+            -keystore ./auxsplay.keystore \
             -storepass "$STORE_PASSWORD" \
             -keypass "$KEY_PASSWORD" \
-            -dname "CN=Cinie Genie, O=Cinie Genie Studios, C=US"
+            -dname "CN=Auxsplay, O=Auxsplay, C=US"
 
       - name: Extract signing fingerprint
         id: fingerprint
         run: |
-          FINGERPRINT=$(keytool -list -v -keystore ./cinie-genie.keystore \
-            -alias cinie-genie -storepass "$STORE_PASSWORD" \
+          FINGERPRINT=$(keytool -list -v -keystore ./auxsplay.keystore \
+            -alias auxsplay -storepass "$STORE_PASSWORD" \
             | grep "SHA256:" | sed 's/.*SHA256: //')
           echo "sha256=$FINGERPRINT" >> "$GITHUB_OUTPUT"
           echo "Signing fingerprint: $FINGERPRINT"
@@ -73,7 +73,7 @@ jobs:
         run: |
           mkdir -p twa-build
           cp twa-manifest.json twa-build/twa-manifest.json
-          cp cinie-genie.keystore twa-build/cinie-genie.keystore
+          cp auxsplay.keystore twa-build/auxsplay.keystore
           cd twa-build
           yes | npx --yes @bubblewrap/cli init \
             --manifest="https://andclaudeai.github.io/Cinie-Genie-Player/manifest.json" 2>&1 || true
@@ -91,7 +91,7 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: cinie-genie-player-apk
+          name: auxsplay-apk
           path: |
             twa-build/**/*.apk
             twa-build/**/*.aab
@@ -115,7 +115,7 @@ jobs:
             "relation": ["delegate_permission/common.handle_all_urls"],
             "target": {
               "namespace": "android_app",
-              "package_name": "com.ciniegenie.player",
+              "package_name": "com.auxsplay.player",
               "sha256_cert_fingerprints": ["${{ steps.fingerprint.outputs.sha256 }}"]
             }
           }]

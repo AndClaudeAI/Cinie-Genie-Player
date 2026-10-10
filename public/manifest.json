@@ -1,6 +1,6 @@
 {
-  "name": "Cinie Genie Player",
-  "short_name": "Cinie Genie",
+  "name": "Auxsplay",
+  "short_name": "Auxsplay",
   "description": "Streaming video player with IPTV support, up to 8K playback, subtitles, and Dolby Atmos",
   "start_url": "./",
   "scope": "./",
